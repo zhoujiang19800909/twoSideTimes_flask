@@ -3,66 +3,93 @@ from flask import Flask, request
 import xmlrpclib
 import json
 
-from wxServices import Register,Student,Product,Parent,Faculty,Employee,Timetable
+from wxServices import Product,Sale,User
 
 
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route('/')	
 def root():
     return " ----- welcome to shuyun! ----- "
 
+# 获取seesionKey
+@app.route('/getSession')
+def getSession():
+	return User().getSession(request)
+
+#获取用户信息
+@app.route('/getUserByOpenid')
+def getUserByOpenid():
+	return User().getUserByOpenid(request)
+
 # 获取所有的产品列表
-@app.route('/products')
+@app.route('/getFoods')
 def products():
-    return Product().getProducts()
+    return Product().getFoods(request)
 
-# 根据openid获取用户在Odoo中的用户账号
-@app.route('/getOdooUserByOpenid')
-def getOdooUserByOpenid():
-    return Register().getOdooUserByOpenid(request)
+# 获取所有的订单列表
+@app.route('/getOrders')
+def getOrders():
+    return Sale().getOrders(request)
 
-# 根据openid获取用户在Odoo中的用户账号
-@app.route('/insertWxuser', methods=['POST'])
-def insertWxuser():
-    return Register().insertWxuser(request)
+# 获取所有的订单列表
+@app.route('/getOrderDetail')
+def getOrderDetail():
+    return Sale().getOrderDetail(request)
 
-# 根据openid获取用户在Odoo中的用户账号	
-@app.route('/getStudentById')
-def getStudentById():
-    return Student().getStudentById(request)
+# 创建订单
+@app.route('/createOrder', methods=['POST'])
+def createOrder():
+    return Sale().createOrder(request)
 
-# 创建学生
-@app.route('/insertStudent', methods=['POST'])
-def insertStudent():
-    return Student().insertStudent(request)
+# 获取客服的订单列表 
+@app.route('/getServiceOrderList')
+def getServiceOrderList():
+    return Sale().getServiceOrderList(request)
 
-# 创建家长
-@app.route('/insertParent', methods=['POST'])
-def insertParent():
-    return Parent().insertParent(request)
+# 获取订单统计结果
+@app.route('/getOrderSts')
+def getOrderSts():
+    return Sale().getOrderSts(request)
 
-# 创建教师
-@app.route('/insertFaculty', methods=['POST'])
-def insertFaculty():
-    return Faculty().insertFaculty(request)
+# 获取订单明旭的统计结果
+@app.route('/getOrderLineSts')
+def getOrderLineSts():
+    return Sale().getOrderLineSts(request)
 
-# 创建员工
-@app.route('/insertEmployee', methods=['POST'])
-def insertEmployee():
-    return Employee().insertEmployee(request)
+# 获取店员的订单列表 
+@app.route('/getWaiterOrderList')
+def getWaiterOrderList():
+    return Sale().getWaiterOrderList(request)
 
-# 查询课程表
-@app.route('/getSessions', methods=['GET'])
-def getSessions():
-    return Timetable().getSessions(request)
+# 获取厨师的订单列表 
+@app.route('/getChefValidityDates')
+def getChefValidityDates():
+    return Sale().getChefValidityDates(request)
 
-# 查询课程表时间段
-@app.route('/getTimingStartEnd', methods=['GET'])
-def getTimingStartEnd():
-    return Timetable().getTimingStartEnd(request)
+# 获取厨师的订单列表 
+@app.route('/getChefOrderList')
+def getChefOrderList():
+    return Sale().getChefOrderList(request)
+
+# 修改订单状态 
+@app.route('/changeOrderStatus', methods=['POST'])
+def changeOrderStatus():
+    return Sale().changeOrderStatus(request)
+
+# 修改订单状态 
+@app.route('/changeOrderLineStatus', methods=['POST'])
+def changeOrderLineStatus():
+    return Sale().changeOrderLineStatus(request)
+
+# 保存订单二维码 
+@app.route('/saveQRCodeToOrder', methods=['POST'])
+def saveQRCodeToOrder():
+    return Sale().saveQRCodeToOrder(request)
+
+
 
 if __name__ == '__main__':
     app.run(debug = True, host='0.0.0.0', port=5000)
-    
+    	

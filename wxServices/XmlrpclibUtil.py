@@ -9,7 +9,7 @@ class XmlrpclibUtil(object):
 	root = 'http://%s:%d/xmlrpc/' % ("127.0.0.1", 8069)
 	db = "odoorun"
 	user = "504351365@qq.com"
-	password = "odoo"
+	password = "123456"
 	models = xmlrpclib.ServerProxy(root + 'object',allow_none=True)
 	uid = xmlrpclib.ServerProxy(root + 'common').login(db, user, password)
 
@@ -21,8 +21,18 @@ class XmlrpclibUtil(object):
 
 
 	def create(self,model,data):
-		print "---------------------data-------------------"
+		print "---------------------create-------------------"
 		print data
 		print type(data)
-		id = self.models.execute_kw(self.db, self.uid, self.password, model, 'create', data)
+		id = self.models.execute_kw(self.db, self.uid, self.password, model, 'create', [data])
 		return id
+
+	def update(self,model,id,data):
+		print "---------------------update-------------------"
+		self.models.execute_kw(self.db, self.uid, self.password, model, 'write', [[id],data])
+
+
+	def search_count(self,model,filters):
+		print "---------------------search_count-------------------"
+		return self.models.execute_kw(self.db, self.uid, self.password, model, 'search_count', filters)
+
